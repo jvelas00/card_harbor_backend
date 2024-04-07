@@ -1,0 +1,58 @@
+create database card_harbor;
+use card_harbor;
+create table Settings(
+    SettingId int not null,
+    UserId int not null,
+    IsSelected boolean
+);
+create table Users(
+    UserId int auto_increment,
+    Username varchar(25),
+	Email varchar(50),
+	FirstName varchar(25),
+	LastName varchar(25),
+	Password varchar(100),
+	primary key(UserId)
+);
+create table Viewers(
+    ViewerId int auto_increment,
+    UserId int not null,
+	StreamerId int not null,
+	LastStreamWatched datetime,
+	StreamsWatched int,
+	CurrentViewingStreak int,
+	AmountDonated double,
+	TimesDonated int,
+	primary key(ViewerId)
+);
+create table Streamer(
+    StreamerId int auto_increment,
+    UserId int not null,
+	primary key(StreamerId)
+);
+create table Streamer_Settings(
+    StreamerId int,
+	SettingId int,
+	Activated boolean
+);
+create table Banned_Words(
+    StreamerId int,
+	Word varchar(255)
+);
+create table Cards(
+    CardId int,
+	CardName varchar(50),
+	Image varchar(255),
+	primary key(CardId)
+);
+create table Streams(
+    StreamId int,
+	StreamerId int,
+	DateOfStream datetime,
+	primary key(StreamId)
+);
+create table Stream_Cards(
+    StreamerId int,
+	StreamId int,
+	CardId int
+);

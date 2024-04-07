@@ -1,0 +1,68 @@
+Getting Started
+
+On windows:
+Download Docker Desktop - https://www.docker.com/products/docker-desktop/
+
+On Linux:
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+For python create requirements.txt file to add any imports and versions needed
+
+Create a Docker file for the service in the service root folder.
+
+*Example fastapi/uvicorn*
+# choosing base image to run (Can get from docker hub official images - https://hub.docker.com/explore)
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
+
+# Copying imports file to container directory to run
+COPY ./requirements.txt /app/requirements.txt
+
+# Install all imports in requirements.txt to container
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+
+# Copy project to container directory
+COPY . /app
+
+Pulling image from docker hub repo
+	Create Docker Hub account and log in on Docker Desktop
+	Docker repo URL - https://hub.docker.com/repository/docker/jvelas00/card_harbor/tags?page=1&ordering=last_updated
+	run terminal command on link
+	
+
+Terminal commands 
+	Build Image - docker build -t <Name of Image>:<specific image tag> .  <- Location of docker file
+	Example build image : "docker build -t card-harbor-backend:latest ."
+
+	Show images - docker images
+
+	Build and Run container - docker run -d --name <container name> -p <what port> <image name>
+	Example: "docker run -d --name card-harbor-backend -p 80:80 card-harbor-backend:latest"
+
+	Show list of containers - docker ps
+
+	Restart container - docker restart <container name>
+
+	Stop container - docker stop <container name>
+
+	Push image to docker hub - Must tag the image first 
+		Tagging image to push - docker tag <image name> <repository name>:<repo tag>
+		Example: "docker tag card-harbor-backend:latest jvelas00/card_harbor:backendlatest"
+		*Can now be viewed in docker desktop images
+
+		Push image - docker push <tagged image name>
+		Example: "docker push jvelas00/card_harbor:backendlatest"
+
+Using Docker Desktop
+	Once an image is built it will be displayed in the Images tab and a container can be created as well using the
+	action column run method
+
+	When an image is tagged you can also push from desktop
+
+Notes
+
+	Nginx is not currently communicating with the backend. need to fix that and add a yml file to compose all of the 	containers together and set up an internal network.
+	
+	For react have to npm run build to get the static files out to the container (may be an issue when deploying out to 	twitch. Have to redo routing and bootstrap. When running frontend container use localhost:8080/home to make sure it 	work
+
+	For fastapi use localhost:80/ to get hello world or localhost:80/GetCardPage/1/10 to get a little list 
+	
